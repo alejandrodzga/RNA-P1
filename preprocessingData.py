@@ -1,14 +1,18 @@
-# Practica 1 de Redes de Neuronas artificiales. Programacion de Adaline.
+# Practica 1 de Redes de Neuronas artificiales. Programacion de Adaline. Preprocesado de datos
+
 import numpy as np
 import random as rnd
+
 # Funcion que coge los datos del archivo y los pasa en forma de matriz en numpy
 def datainput():
     f = open('Data/california_housing_train.dat')
     data = np.loadtxt(f,dtype=float, delimiter=',',skiprows=1)
+    np.array(data)
     f.close()
     return data 
 
- #Funcion cuyo objetivo es normalizar los valores de la matriz entre 0 y 1
+
+# Funcion cuyo objetivo es normalizar los valores de la matriz entre 0 y 1
 def normalizacion(data):
     #columna1
     v0 = data[:,0]
@@ -65,8 +69,10 @@ def normalizacion(data):
     data[:,8] = (v8-minimo9)/(maximo9-minimo9)
 
 
-#######################################################
-print('METODO MAIN AQUI:')
+
+
+########################################################################################################
+# CODIGO DE PREPROCESADO DE DATOS 
 
 # Obtenemos la matriz a partir de la entrada de datos del fichero
 datos = datainput()
@@ -75,16 +81,54 @@ datos = datainput()
 normalizacion(datos)
 
 # Aleatorizacion de los datos (rotar las filas de la matriz)
-#rnd.shuffle(datos)
+np.random.shuffle(datos)
+
+# Dividimos el conjunto de datos en 3 subconjuntos 
+# Subconjunto de datos de entrenamiento
+trainData = datos[:10200,]
+
+# Subconjunto de datos de validacion
+validationData = datos[10200:13600]
+
+# Subconjunto de datos de test
+testData = datos[13600:]
 
 
-print(datos[:,:])
+####################################### SALIDA DE DATOS #################################################
 
+
+# SALIDA DEL CONJUNTO DE DATOS NORMALIZADOS (SIN DIVIDIR)
 # Abrimos el archivo de salida de datos 
 f1 = open("dataout.txt", "w")
-
 # Guardamos la matriz en su formato en el archivo de salida de texto
 np.savetxt(f1, datos, delimiter=' , ', fmt='%f')
-
 f1.close()
+
+
+# SALIDA DATOS DE ENTRENAMIENTO
+# Abrimos el archivo de salida de datos 
+f2 = open("trainData.txt", "w")
+# Guardamos la matriz en su formato en el archivo de salida de texto
+np.savetxt(f2, trainData, delimiter=' , ', fmt='%f')
+f2.close()
+
+
+# SALIDA DATOS DE VALIDACION
+# Abrimos el archivo de salida de datos 
+f3 = open("validationData.txt", "w")
+# Guardamos la matriz en su formato en el archivo de salida de texto
+np.savetxt(f3, validationData, delimiter=' , ', fmt='%f')
+f3.close()
+
+
+# SALIDA DATOS DE TEST
+# Abrimos el archivo de salida de datos 
+f4 = open("testData.txt", "w")
+# Guardamos la matriz en su formato en el archivo de salida de texto
+np.savetxt(f4, testData, delimiter=' , ', fmt='%f')
+f4.close()
+
+
+
+
 
