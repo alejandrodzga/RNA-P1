@@ -5,17 +5,17 @@ import random
 
 # Entrada de archivos de datos, ATENCION: Estos archivos son creados al ejecutar preprocessingData.py
 f1 = open('trainData.txt')
-trainData = np.loadtxt(f1,dtype=float, delimiter=',',skiprows=1)
+trainData = np.loadtxt(f1,dtype=float, delimiter=',',skiprows=0)
 trainData = np.array(trainData)
 f1.close()
     
 f2 = open('testData.txt')
-testData = np.loadtxt(f2,dtype=float, delimiter=',',skiprows=1)
+testData = np.loadtxt(f2,dtype=float, delimiter=',',skiprows=0)
 testData = np.array(testData)
 f2.close()
     
 f3 = open('validationData.txt')
-validationData = np.loadtxt(f3,dtype=float, delimiter=',',skiprows=1)
+validationData = np.loadtxt(f3,dtype=float, delimiter=',',skiprows=0)
 validationData = np.array(validationData)
 f3.close()
     
@@ -51,18 +51,29 @@ razon = sys.argv[2]
 
 
 # Funcion que multiplica los pesos por las entradas y devuelve una salida real 
-def calcSalida(matrizpesos, filadatos):
+def calcSalida(matrizpesos, filadatos, umbral):
     # Realizamos la multiplicacion entre vectores (cada entrada con su peso correspondiente)
     matrizres = matrizpesos*filadatos[:8]
     
     # Realizamos el sumatorio de la matriz resultante al multiplicar los pesos con las entradas para obtener la salida
     salidaReal = np.sum(matrizres, axis=1)
-    salidaReal = salidaReal[0] # Convertimos a numero
+    salidaReal = salidaReal[0]+umbral # Convertimos a numero
     return salidaReal
+
+
+def calcNuevosPesos(matrizpesos, filadatos, razon, resultadoEsperado, resultado):
+    #ERROR: Tipo de datos (float, long) incompatibles a la hora de operar
+    matrizIncrementoPesos = razon*(resultadoEsperado-resultado)*filadatos[:8]
+    matrizNuevosPesos = matrizpesos + matrizIncrementoPesos
+    return matrizNuevosPesos
+
+##def calcNuevoUmbral(razon, resultado, resultadoEsperado):
 
 #######################################################  MAIN   ############################################# 
 
 
-resultado = calcSalida(pesos,trainData[0])
-#print(trainData[0])
+resultado = calcSalida(pesos,trainData[0],umbral)
+#nuevosPesos = calcNuevosPesos(pesos, trainData[0], razon, trainData[0][8], resultado)
+print(trainData[0])
 print(resultado)
+#print(nuevosPesos)
