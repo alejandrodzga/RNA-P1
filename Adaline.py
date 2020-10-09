@@ -24,19 +24,10 @@ f3.close()
 # Tenemos 8 pesos y otro elemento mas dedicado al umbral, un total de 9 elementos en el vector
 pesos = np.random.rand(1,8)
 umbral = random.random()
-print(pesos)
-print(umbral)
+# NOTA: Estamos trabajando con float64 en la matriz de pesos 
 
-
-
-################################################################################################
-""" TODO  DUDA SOBRE SI USAR MEJOR UNA DISTRIBUCION NORMAL PARA CREAR LA MATRIZ DE PESOS
-print("sssss")
-x = np.random.randn(1, 9)
-print(x)
-"""
-################################################################################################
-
+#print("LOS PESOS: ",type(pesos[0,6]),pesos)
+#print("UMBRAL: ",type(umbral))
 
 
 # Caso de error en el que no se le pasan los parametros necesarios 
@@ -45,10 +36,11 @@ if(len(sys.argv)!=3):
 
 
 # Entrada de los hiperparametros 
-# El formato de entrada de parametros es el siguiente: Adaline.py datos.txt nciclos razon
-nciclos = sys.argv[1]
-razon = sys.argv[2]
+# El formato de entrada de parametros es el siguiente: Adaline.py nciclos razon
+nciclos = int(sys.argv[1])
+razon = float(sys.argv[2])
 
+print("PESOS INICIALES: ",pesos)
 
 # Funcion que multiplica los pesos por las entradas y devuelve una salida real 
 def calcSalida(matrizpesos, filadatos, umbral):
@@ -57,14 +49,21 @@ def calcSalida(matrizpesos, filadatos, umbral):
     
     # Realizamos el sumatorio de la matriz resultante al multiplicar los pesos con las entradas para obtener la salida
     salidaReal = np.sum(matrizres, axis=1)
+
     salidaReal = salidaReal[0]+umbral # Convertimos a numero
     return salidaReal
 
 
 def calcNuevosPesos(matrizpesos, filadatos, razon, resultadoEsperado, resultado):
     #ERROR: Tipo de datos (float, long) incompatibles a la hora de operar
-    matrizIncrementoPesos = razon*(resultadoEsperado-resultado)*filadatos[:8]
+    print("filadatos: ",filadatos[:8])
+    matrizIncrementoPesos = (razon*(resultadoEsperado-resultado))*filadatos[:8]
+    print("MATRIZ INCREMENTO DE PESOS: ",matrizIncrementoPesos)
     matrizNuevosPesos = matrizpesos + matrizIncrementoPesos
+
+
+
+
     return matrizNuevosPesos
 
 ##def calcNuevoUmbral(razon, resultado, resultadoEsperado):
@@ -73,7 +72,8 @@ def calcNuevosPesos(matrizpesos, filadatos, razon, resultadoEsperado, resultado)
 
 
 resultado = calcSalida(pesos,trainData[0],umbral)
-#nuevosPesos = calcNuevosPesos(pesos, trainData[0], razon, trainData[0][8], resultado)
+nuevosPesos = calcNuevosPesos(pesos, trainData[0], razon, trainData[0][8], resultado)
 print(trainData[0])
-print(resultado)
-#print(nuevosPesos)
+
+print("resultado y: ",resultado)
+print("Nuevos pesos CALCULADOS: ",nuevosPesos)
