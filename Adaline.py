@@ -53,27 +53,78 @@ def calcSalida(matrizpesos, filadatos, umbral):
     salidaReal = salidaReal[0]+umbral # Convertimos a numero
     return salidaReal
 
-
+# Funcion para el ajuste de los nuevos pesos en funcion de la salida obtenida y la entrada
 def calcNuevosPesos(matrizpesos, filadatos, razon, resultadoEsperado, resultado):
-    #ERROR: Tipo de datos (float, long) incompatibles a la hora de operar
-    print("filadatos: ",filadatos[:8])
+    
+    # Aplicamos la formula de incremento/decremento de pesos para ajustar los pesos anteriores
     matrizIncrementoPesos = (razon*(resultadoEsperado-resultado))*filadatos[:8]
-    print("MATRIZ INCREMENTO DE PESOS: ",matrizIncrementoPesos)
     matrizNuevosPesos = matrizpesos + matrizIncrementoPesos
-
-
-
 
     return matrizNuevosPesos
 
-##def calcNuevoUmbral(razon, resultado, resultadoEsperado):
+# Funcion para calcular el nuevo umbral en funcion de la salida obtenida
+def calcNuevoUmbral(razon, resultado, resultadoEsperado,umbral):
+    
+    incrementoUmbral = razon*(resultadoEsperado-resultado)
+    nuevoUmbral = umbral + incrementoUmbral
+    return nuevoUmbral
+
+
+
+# TODO REVISAR FUNCIONAMIENTO!!!!!!!!
+# Funcion Error Cuadratico medio MSE 
+def calcMSE(columnadatos,matrizsalidas,numerofilas):
+    matrizdiff = columnadatos-matrizSalidas
+    matrizdiff = matrizdiff**2
+    resultadoN = np.sum(matrizdiff, axis=1)
+    resultadoN = resultadoN/numerofilas
+    return resultadoN
+
+
+
+
 
 #######################################################  MAIN   ############################################# 
+resultado = 0
+
+# TODO CREAR VARIABLE PARA EL NUMERO DE FILAS DE ENTRENAMIENTO, OTRA PARA TEST... (SUSTITUIR EL 10200)
+
+# Aqui guardamos cada resultado con el objetivo de tener todas las salidas para el calculo de error
+matrizSalidas = [10200] 
+
+""" MATRICES PARA GUARDAR TODOS LOS ERRORES DE CADA ITERACION Y POSTERIORMENTE HACER GRAFICAS...
+matrizErroresAbsolutos = [nciclos]
+matrizErroresCuadraticos = [nciclos]
+"""
+
+# Bucle for de los CICLOS
+for i in range(nciclos):
+    
+    for j in range(10200):
+        
+        #print("resultado: ",resultado,", numero: ",j)
+        resultado = calcSalida(pesos,trainData[j],umbral)
+        pesos = calcNuevosPesos(pesos, trainData[j], razon, trainData[j][8], resultado)
+        umbral = calcNuevoUmbral(razon,resultado,trainData[j][8],umbral)
 
 
-resultado = calcSalida(pesos,trainData[0],umbral)
-nuevosPesos = calcNuevosPesos(pesos, trainData[0], razon, trainData[0][8], resultado)
+    
+
+
+
+
+
+#resultado = calcSalida(pesos,trainData[0],umbral)
+#nuevosPesos = calcNuevosPesos(pesos, trainData[0], razon, trainData[0][8], resultado)
 print(trainData[0])
 
-print("resultado y: ",resultado)
-print("Nuevos pesos CALCULADOS: ",nuevosPesos)
+print("resultado y FINAL: ",resultado)
+print("pesos FINALES CALCULADOS: ",pesos)
+print("UMBRAL FINAL: ",umbral)
+
+
+# TODO VER QUE TIPO DE ERROR HAY QUE USAR EN ENTRENAMIENTO Y VALIDACION
+# TODO ACABAR FORMULAS DE LOS ERRORES
+# TODO CREAR MATRIZ DE SALIDAS POR CADA ITERACION PARA USARSE EN EL CALCULO DE ERRORES
+# TODO VER COMO FUNCIONAN LOS CONJUNTOS DE TEST Y VALIDACION Y CUANDO HAY QUE USARLOS 
+# TODO GRAFICAS CON LOS ERRORES DE TODAS LAS ITERACIONES
