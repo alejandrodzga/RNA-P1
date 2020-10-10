@@ -87,6 +87,19 @@ def calcMSE(columnadatos,matrizsalidas,numerofilas):
 #######################################################  MAIN   ############################################# 
 resultado = 0
 
+
+""" PRUEBA DE CODIGO AÑADIR FILAS A UNA MATRIZ
+matrix = np.array([[1,2,3], [4,5,6]])
+
+print("MATRIX NORMAL: ",matrix)
+
+newrow = np.array([[1,2,3]])
+matrix = np.concatenate((matrix,newrow))
+
+print("MATRIX NUEVA: ",matrix)
+
+"""
+
 # TODO CREAR VARIABLE PARA EL NUMERO DE FILAS DE ENTRENAMIENTO, OTRA PARA TEST... (SUSTITUIR EL 10200)
 
 # Aqui guardamos cada resultado con el objetivo de tener todas las salidas para el calculo de error
