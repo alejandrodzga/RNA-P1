@@ -40,7 +40,7 @@ if(len(sys.argv)!=3):
 nciclos = int(sys.argv[1])
 razon = float(sys.argv[2])
 
-print("PESOS INICIALES: ",pesos)
+#print("PESOS INICIALES: ",pesos)
 
 # Funcion que multiplica los pesos por las entradas y devuelve una salida real 
 def calcSalida(matrizpesos, filadatos, umbral):
@@ -71,13 +71,26 @@ def calcNuevoUmbral(razon, resultado, resultadoEsperado,umbral):
 
 
 
-# TODO REVISAR FUNCIONAMIENTO!!!!!!!!
+# FIXME ARREGLAR METODO 
 # Funcion Error Cuadratico medio MSE 
 def calcMSE(columnadatos,matrizsalidas,numerofilas):
+    print("COLUMNADATOS: ",columnadatos)
+    print("MATRIZSALIDAS: ",matrizsalidas)
+
+    np.array(columnadatos)
+    np.array(matrizsalidas)
+  
+    matrizdiff = np.subtract(columnadatos,matrizsalidas)
+
+
     matrizdiff = columnadatos-matrizSalidas
+
+    print("MATRIZdiff: ",matrizdiff)
     matrizdiff = matrizdiff**2
-    resultadoN = np.sum(matrizdiff, axis=1)
+    resultadoN = np.sum(matrizdiff)
+    print("RESULTADO N ",resultadoN)
     resultadoN = resultadoN/numerofilas
+    print("Resultado del ERROR MSE ", resultadoN)
     return resultadoN
 
 
@@ -88,7 +101,7 @@ def calcMSE(columnadatos,matrizsalidas,numerofilas):
 resultado = 0
 
 
-""" PRUEBA DE CODIGO AÑADIR FILAS A UNA MATRIZ
+""" PRUEBA DE CODIGO AÑADIR FILAS A UNA MATRIZ NADA QUE VER CON ESTE CODIGO
 matrix = np.array([[1,2,3], [4,5,6]])
 
 print("MATRIX NORMAL: ",matrix)
@@ -103,8 +116,8 @@ print("MATRIX NUEVA: ",matrix)
 # TODO CREAR VARIABLE PARA EL NUMERO DE FILAS DE ENTRENAMIENTO, OTRA PARA TEST... (SUSTITUIR EL 10200)
 
 # Aqui guardamos cada resultado con el objetivo de tener todas las salidas para el calculo de error
-matrizSalidas = [10200] 
-
+matrizSalidas = [] 
+np.array(matrizSalidas)
 """ MATRICES PARA GUARDAR TODOS LOS ERRORES DE CADA ITERACION Y POSTERIORMENTE HACER GRAFICAS...
 matrizErroresAbsolutos = [nciclos]
 matrizErroresCuadraticos = [nciclos]
@@ -116,12 +129,17 @@ for i in range(nciclos):
     for j in range(10200):
         
         #print("resultado: ",resultado,", numero: ",j)
-        resultado = calcSalida(pesos,trainData[j],umbral)
-        pesos = calcNuevosPesos(pesos, trainData[j], razon, trainData[j][8], resultado)
-        umbral = calcNuevoUmbral(razon,resultado,trainData[j][8],umbral)
+        matrizSalidas.append([])
+        matrizSalidas[j].append(calcSalida(pesos,trainData[j],umbral))
+        print(matrizSalidas[j])
 
 
-    
+resMSE = calcMSE(trainData[8],matrizSalidas,10200)
+
+print("Resultados de MSE: ",resMSE)
+
+        #pesos = calcNuevosPesos(pesos, trainData[j], razon, trainData[j][8], resultado)
+        #umbral = calcNuevoUmbral(razon,resultado,trainData[j][8],umbral) 
 
 
 
@@ -131,9 +149,21 @@ for i in range(nciclos):
 #nuevosPesos = calcNuevosPesos(pesos, trainData[0], razon, trainData[0][8], resultado)
 print(trainData[0])
 
-print("resultado y FINAL: ",resultado)
-print("pesos FINALES CALCULADOS: ",pesos)
-print("UMBRAL FINAL: ",umbral)
+#print("resultado y FINAL: ",resultado)
+#print("pesos FINALES CALCULADOS: ",pesos)
+#print("UMBRAL FINAL: ",umbral)
+
+
+
+
+# FIXME PRUEBA DEL METODO MSE
+
+matrizA = np.array([[1],[2],[3],[4]])
+matrizB = np.array([[5],[1],[7],[3]])
+
+resab = calcMSE(matrizA,matrizB,4)
+print("TRESTTT ",resab)
+
 
 
 # TODO VER QUE TIPO DE ERROR HAY QUE USAR EN ENTRENAMIENTO Y VALIDACION
