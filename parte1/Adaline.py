@@ -3,6 +3,9 @@ import numpy as np
 import sys
 import random
 
+import matplotlib.pyplot as plt
+
+
 # Entrada de archivos de datos, ATENCION: Estos archivos son creados al ejecutar preprocessingData.py
 f1 = open('trainData.txt')
 trainData = np.loadtxt(f1,dtype=float, delimiter=',',skiprows=0)
@@ -148,11 +151,17 @@ matrizSalidasTest = np.empty(testRows)
 
 # Aqui guardamos cada resultado con el objetivo de tener todas las salidas para el calculo de error
 
+# MATRICES PARA GUARDAR TODOS LOS ERRORES DE CADA ITERACION Y POSTERIORMENTE HACER GRAFICAS...
 
-""" MATRICES PARA GUARDAR TODOS LOS ERRORES DE CADA ITERACION Y POSTERIORMENTE HACER GRAFICAS...
-matrizErroresAbsolutos = [nciclos]
-matrizErroresCuadraticos = [nciclos]
-"""
+
+matrizErroresCuadraticos = np.empty(nciclos)
+matrizErroresAbsolutos = np.empty(nciclos)
+
+VmatrizErroresCuadraticos = np.empty(nciclos)
+VmatrizErroresAbsolutos = np.empty(nciclos)
+
+TmatrizErroresCuadraticos = np.empty(nciclos)
+TmatrizErroresAbsolutos = np.empty(nciclos)
 
 # Bucle for de los CICLOS 
 for i in range(nciclos):
@@ -171,19 +180,68 @@ for i in range(nciclos):
         umbral = calcNuevoUmbral(razon,matrizSalidasTrain[j],trainData[j][8],umbral) 
         #print("matriz pesos ",pesos)
         #print(" umbral ",umbral)
-    
+    for k in range(validationRows):
+        matrizSalidasValidation[k] = calcSalida(pesos,validationData[k],umbral)
+
+
     #print(matrizSalidasTrain[:])
     #print("TRASDFASFDADSF",trainData[:,8])
     # Calculamos los errores
-    resMSE = calcMSE(trainData[:,8],matrizSalidasTrain[:],trainRows)
-    resMAE = calcMAE(trainData[:,8],matrizSalidasTrain[:],trainRows)
-    print("Resultados de MSE: ",resMSE)
-    print("Resultados de MAE: ",resMAE)
+    matrizErroresCuadraticos[i] = calcMSE(trainData[:,8],matrizSalidasTrain[:],trainRows)
+    matrizErroresAbsolutos[i] = calcMAE(trainData[:,8],matrizSalidasTrain[:],trainRows)
+    
+    VmatrizErroresCuadraticos[i] = calcMSE(validationData[:,8],matrizSalidasValidation[:],validationRows)
+    VmatrizErroresAbsolutos[i] = calcMAE(validationData[:,8],matrizSalidasValidation[:],validationRows)
+    
+    print("Resultados de MSE: ",matrizErroresCuadraticos[i])
+    print("Resultados de MAE: ",matrizErroresAbsolutos[i])
 
 
+
+
+# TODO HACER UNA RECTA EN LUGAR DE UN BUCLE...
+for o in range(nciclos):
+    for l in range(testRows):
+        matrizSalidasTest[l] = calcSalida(pesos,testData[l],umbral)
+
+    TmatrizErroresAbsolutos[o] = calcMAE(testData[:,8],matrizSalidasTest[:],testRows)
+    TmatrizErroresCuadraticos[o] = calcMSE(testData[:,8],matrizSalidasTest[:],testRows)
+    
+    print("Resultados de MSE TEST: ",TmatrizErroresCuadraticos[o])
+    print("Resultados de MAE TEST: ",TmatrizErroresAbsolutos[o])
+
+
+
+# x axis values 
+x = np.arange(0,nciclos)
+# corresponding y axis values 
+
+  
+# plotting the points  
+#plt.plot(x,log(matrizErroresAbsolutos))
+#plt.legend(handles=[], loc='upper right')
+
+
+# TODO VER LA LEYENDA Y VER SI HAY QUE PONER ERRORES EN ESCALA LOGARITMICA O NO
+plt.plot(x,VmatrizErroresCuadraticos,label="Error validacion")
+plt.plot(x,matrizErroresCuadraticos,label="Error entrenamiento") 
+plt.plot(x,TmatrizErroresCuadraticos,label="Error test") 
+
+plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+# naming the x axis 
+plt.xlabel('ciclos') 
+# naming the y axis 
+plt.ylabel('Valor de Error') 
+  
+# giving a title to my graph 
+plt.title('My first graph!') 
+
+# function to show the plot 
+plt.show() 
 
 ################################################################ FIN MAIN ##########################################################################
-""" PRUEBAS FUNCIONAMIENTO INCREMENTO PESOS Y UMBRAL
+"""
+PRUEBAS FUNCIONAMIENTO INCREMENTO PESOS Y UMBRAL
 resultado = calcSalida(pesos,trainData[0],umbral)
 nuevosPesos = calcNuevosPesos(pesos, trainData[0], razon, trainData[0][8], resultado)
 print(trainData[0])
