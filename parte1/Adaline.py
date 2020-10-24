@@ -286,7 +286,7 @@ plt.plot(x,TmatrizErroresAbsolutos,'--r',label="Error test")
 
 plt.legend()
 # naming the x axis 
-plt.xlabel('ciclos') 
+plt.xlabel('Ciclos') 
 # naming the y axis 
 plt.ylabel('Valor Error Medio Absoluto (MAE)') 
   
