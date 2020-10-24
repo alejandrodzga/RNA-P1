@@ -190,22 +190,38 @@ for o in range(nciclos):
     
 
 
+# Imprimimos los ultimos errores:
+
+# Errores finales conjunto de entrenamiento
+print("Ultimo MSE entrenamiento: ",matrizErroresCuadraticos[nciclos-1])
+print("Ultimo MAE entrenamiento: ",matrizErroresAbsolutos[nciclos-1])
+
+# Errores finales conjunto validacion
+print("Ultimo MSE validacion: ",VmatrizErroresCuadraticos[nciclos-1])
+print("Ultimo MAE validacion: ",VmatrizErroresAbsolutos[nciclos-1])
+
+# Errores finales conjunto test
+print("Ultimo MSE test: ",TmatrizErroresCuadraticos[nciclos-1])
+print("Ultimo MAE test: ",TmatrizErroresAbsolutos[nciclos-1])
+
+
 # SALIDAS
 
 # Salida de los datos del modelo
 print("Modelo final, Pesos: ",pesos,"Umbral:",umbral)
 
 modelo = np.append(pesos,umbral)
-print("new pesos+umbral: ",modelo)
+#print("new pesos+umbral: ",modelo)
 
-
-modelfilename = 'modelo'+str(nciclos)+'ciclos'+str(razon)+'razon.txt'
+modelfilename = 'Modelo'+str(nciclos)+'Ciclos'+str(razon)+'Razon.txt'
 #'hanning(%d).pdf' % num    %razon
 
 f1 = open(modelfilename, "w")
 # Guardamos la matriz en su formato en el archivo de salida de texto
 np.savetxt(f1, modelo, delimiter=' , ', fmt='%f')
 f1.close()
+
+
 
 #-----------------------------------------------------------
 # SALIDAS DE LOS DATOS PARA COMPARAR OBTENIDOS CON ESPERADOS
@@ -233,29 +249,22 @@ f1.close()
 # Eje X numero de ciclos (Temporal)
 x = np.arange(0,nciclos)
 
-
-
-
 # Grafica error MSE
-
-
 # En caso de querer en escala logaritmica las tablas de los errores descomentar
 """
 plt.xscale('log')
 plt.yscale('log')
 """
 
-
 plt.plot(x,VmatrizErroresCuadraticos,label="Error validacion")
 plt.plot(x,matrizErroresCuadraticos,label="Error entrenamiento") 
 plt.plot(x,TmatrizErroresCuadraticos,'--r',label="Error test") 
 
-
 plt.legend()
 # naming the x axis 
-plt.xlabel('ciclos') 
+plt.xlabel('Ciclos') 
 # naming the y axis 
-plt.ylabel('Valor de Error') 
+plt.ylabel('Valor Error Cuadratico Medio (MSE)') 
   
 # giving a title to my graph 
 plt.title('Errores MSE') 
@@ -264,30 +273,22 @@ plt.title('Errores MSE')
 plt.show() 
 
 
-
 # Grafica error MAE
-
-
 # En caso de querer en escala logaritmica las tablas de los errores descomentar
 """
 plt.xscale('log')
 plt.yscale('log')
 """
 
-
 plt.plot(x,VmatrizErroresAbsolutos,label="Error validacion")
 plt.plot(x,matrizErroresAbsolutos,label="Error entrenamiento") 
 plt.plot(x,TmatrizErroresAbsolutos,'--r',label="Error test") 
-
-#plt.axhline(y=TErrorCuadratico, xmin=0, xmax=nciclos,label="Error de Test",color='r')
-
-#plt.plot(x,y,label="Error test") 
 
 plt.legend()
 # naming the x axis 
 plt.xlabel('ciclos') 
 # naming the y axis 
-plt.ylabel('Valor de Error') 
+plt.ylabel('Valor Error Medio Absoluto (MAE)') 
   
 # giving a title to my graph 
 plt.title('Errores MAE') 
