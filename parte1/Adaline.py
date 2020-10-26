@@ -113,6 +113,27 @@ def calcMAE(columnadatos,matrizsalidas,numerofilas):
     return resultadoN
 
 
+# Funcion encargada de desnormalizar los datos para la salida
+def denormalice(matrizsalidas,numerofilas,numerocolumnas):
+
+    # Primero obtenemos los datos maximos y minimos de la columna de datos esperados
+    f = open('Data/california_housing_train.dat')
+    data = np.loadtxt(f,dtype=float, delimiter=',',skiprows=1)
+    np.array(data)
+    f.close()
+
+    # Sacamos la columna de datos esperados
+    cesperados = data[:,8]
+    # obtenemos los datos maximos y minimos para la denormalizacion 
+    maximo = np.amax(cesperados)
+    minimo = np.amin(cesperados)
+
+    # Formula para desnormalizar los valores
+    matrizsalidas[:,1] = matrizsalidas[:,1]*(maximo-minimo)+minimo
+    matrizsalidas[:,0] = matrizsalidas[:,0]*(maximo-minimo)+minimo
+
+    return matrizsalidas
+
 
 #######################################################  MAIN   ############################################# 
 
@@ -135,6 +156,7 @@ matrizSalidasValidation = np.empty(validationRows)
 
 # Numero de filas de la matriz de test
 testRows = len(testData)
+
 
 # Salidas matriz de Test
 matrizSalidasTest = np.empty(testRows)
@@ -226,19 +248,22 @@ f1.close()
 #-----------------------------------------------------------
 # SALIDAS DE LOS DATOS PARA COMPARAR OBTENIDOS CON ESPERADOS
 
-#print("dimension esperada: ",trainData[:,8].shape,"dimension sacada: ",matrizSalidasTrain.shape)
+# Matriz de salidas obtenidas con el conjunto de test y salidas esperadas
+cmsalida = np.zeros((testRows,2))
+cmsalida[:,0] = matrizSalidasTest
+cmsalida[:,1] = testData[:,8]
 
-#matrixnew = np.array(trainData[:,8],matrizSalidasTrain)
-#print(matrixnew[:,:])
-# Salidas conjunto de entrenamiento
-#salidas1 = np.append(np.array(matrizSalidasTrain),np.array(trainData[:,8]))
-#print(salidas1)
-#s1filename = 'trainsalidas'+str(nciclos)+'ciclos'+str(razon)+'razon.txt'
+# Desnormalizamos los valores de las salidas
+cmsalida = denormalice(cmsalida,testRows,2)
 
-#f2 = open(s1filename, "w")
+# Sacamos por archivo de texto ambas salidas, la obtenida y la esperada sin normalizar
+s1filename = 'TESTsalidas'+str(nciclos)+'ciclos'+str(razon)+'razon.txt'
+f2 = open(s1filename, "w")
+
 # Guardamos la matriz en su formato en el archivo de salida de texto
-#np.savetxt(f2, salidas1, delimiter=' , ', fmt='%f')
-#f1.close()
+np.savetxt(f2, cmsalida, delimiter=' , ', fmt='%f')
+f1.close()
+
 
 
 #-----------------------------------------------------------
