@@ -7,13 +7,13 @@ MSE <- function(pred,obs) {sum((pred-obs)^2)/length(obs)}
 
 #CARGA DE DATOS
 # se supone que los ficheros tienen encabezados
- trainSet <- read.csv("train.csv",dec=".",sep=",",header = T)
- validSet <- read.csv( "Valid.csv",dec=".",sep=",",header = T)
- testSet  <- read.csv("Test.csv",dec=".",sep=",",header = T)
+ #trainSet <- read.csv("train.csv",dec=".",sep=",",header = T)
+ #validSet <- read.csv( "Valid.csv",dec=".",sep=",",header = T)
+ #testSet  <- read.csv("Test.csv",dec=".",sep=",",header = T)
 
- #trainSet <- read.table("trainParab.dat")
- #validSet <- read.table( "testParab.dat")
- #testSet <- read.table( "testParab.dat")
+ trainSet <- read.table("trainParab.dat")
+ validSet <- read.table( "validParab.dat")
+ testSet <- read.table( "testParab.dat")
 
 
 salida <- ncol (trainSet)   #num de la columna de salida
