@@ -256,7 +256,7 @@ cmsalida[:,1] = testData[:,8]
 # Desnormalizamos los valores de las salidas
 cmsalida = denormalice(cmsalida,testRows,2)
 
-# Sacamos por archivo de texto ambas salidas, la obtenida y la esperada sin normalizar
+# Sacamos por archivo de texto ambas salidas, la obtenida y la esperada sin normalziar
 s1filename = 'TESTsalidas'+str(nciclos)+'ciclos'+str(razon)+'razon.txt'
 f2 = open(s1filename, "w")
 
