@@ -244,6 +244,27 @@ np.savetxt(f1, modelo, delimiter=' , ', fmt='%f')
 f1.close()
 
 
+# Salida de los errores de entrenamiento y validacion MSE por cada ciclo de entrenamiento
+mserror = np.empty((nciclos,2))
+mserror[:,0] = matrizErroresCuadraticos
+mserror[:,1] = VmatrizErroresCuadraticos
+
+f2 = open('ErroresMSE.txt', "w")
+
+np.savetxt(f2, mserror, delimiter=' , ', fmt='%f')
+f2.close()
+
+
+maerror = np.empty((nciclos,2))
+maerror[:,0] = matrizErroresAbsolutos
+maerror[:,1] = VmatrizErroresAbsolutos
+
+f3 = open('ErroresMAE.txt', "w")
+
+np.savetxt(f3, maerror, delimiter=' , ', fmt='%f')
+f3.close()
+
+
 
 #-----------------------------------------------------------
 # SALIDAS DE LOS DATOS PARA COMPARAR OBTENIDOS CON ESPERADOS
