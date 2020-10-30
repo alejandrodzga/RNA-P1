@@ -39,7 +39,6 @@ nciclos = int(sys.argv[1])
 razon = float(sys.argv[2])
 
 
-
 # Funcion que multiplica los pesos por las entradas y devuelve una salida real 
 def calcSalida(matrizpesos, filadatos, umbral):
     # Realizamos la multiplicacion entre vectores (cada entrada con su peso correspondiente)
@@ -53,6 +52,7 @@ def calcSalida(matrizpesos, filadatos, umbral):
 
     return salidaReal
 
+
 # Funcion para el ajuste de los nuevos pesos en funcion de la salida obtenida y la entrada 
 def calcNuevosPesos(matrizpesos, filadatos, razon, resultadoEsperado, resultado):
     
@@ -64,6 +64,7 @@ def calcNuevosPesos(matrizpesos, filadatos, razon, resultadoEsperado, resultado)
     matrizNuevosPesos = matrizpesos + matrizIncrementoPesos
 
     return matrizNuevosPesos
+
 
 # Funcion para calcular el nuevo umbral en funcion de la salida obtenida  
 def calcNuevoUmbral(razon, resultado, resultadoEsperado,umbral):
@@ -90,8 +91,6 @@ def calcMSE(columnadatos,matrizsalidas,numerofilas):
     resultadoN = resultadoN/numerofilas
     
     return resultadoN
-
-
 
 
 # Funcion Error absoluto medio 
@@ -160,7 +159,6 @@ testRows = len(testData)
 
 # Salidas matriz de Test
 matrizSalidasTest = np.empty(testRows)
-
 
 
 # MATRICES PARA GUARDAR TODOS LOS ERRORES DE CADA ITERACION Y POSTERIORMENTE HACER GRAFICAS
@@ -233,10 +231,8 @@ print("Ultimo MAE test: ",TmatrizErroresAbsolutos[nciclos-1])
 print("Modelo final, Pesos: ",pesos,"Umbral:",umbral)
 
 modelo = np.append(pesos,umbral)
-#print("new pesos+umbral: ",modelo)
 
 modelfilename = 'Modelo'+str(nciclos)+'Ciclos'+str(razon)+'Razon.txt'
-#'hanning(%d).pdf' % num    %razon
 
 f1 = open(modelfilename, "w")
 # Guardamos la matriz en su formato en el archivo de salida de texto
@@ -254,7 +250,7 @@ f2 = open('ErroresMSE.txt', "w")
 np.savetxt(f2, mserror, delimiter=' , ', fmt='%f')
 f2.close()
 
-
+# Salida de los errores de entrenamiento y validacion MAE por cada ciclo de entrenamiento
 maerror = np.empty((nciclos,2))
 maerror[:,0] = matrizErroresAbsolutos
 maerror[:,1] = VmatrizErroresAbsolutos
@@ -263,7 +259,6 @@ f3 = open('ErroresMAE.txt', "w")
 
 np.savetxt(f3, maerror, delimiter=' , ', fmt='%f')
 f3.close()
-
 
 
 #-----------------------------------------------------------
@@ -341,7 +336,6 @@ plt.title('Errores MAE')
 
 # function to show the plot 
 plt.show() 
-
 
 ################################################################ FIN MAIN ##########################################################################
 
